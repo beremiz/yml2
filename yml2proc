@@ -94,16 +94,15 @@ backend.includePath.extend(dirs)
 
 if options.xml2yml:
     for directory in backend.includePath:
-        try:
-            name = directory + "/xml2yml.ysl2"
-            f = open(name, "r")
-            f.close()
+        name = os.path.join(directory, "xml2yml.ysl2")
+        if os.path.isfile(name):
+            options.yslt = name
+            options.xml = True
             break
-        except:
-            pass
-
-    options.yslt = name
-    options.xml = True
+    else:
+        sys.stderr.write("Error: Stylesheet xml2yml.ysl2 required for --xml2yml not found\n")
+        sys.stderr.write("Please check your YML_PATH\n")
+        sys.exit(1)
 
 if  (options.xslt and options.yslt) or (options.xslt and options.xpath) or (options.yslt and options.xpath):
     sys.stderr.write("Cannot combine --xpath, --xslt and --yslt params\n")

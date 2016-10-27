@@ -26,3 +26,7 @@ dist: dist/yml-$(PKGVER).tar.gz
 
 dist/yml-$(PKGVER).tar.gz:
 	python setup.py sdist
+
+install:
+	pip install .
+	rm setup.py

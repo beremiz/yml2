@@ -59,3 +59,8 @@ def "yml:mixedCase" {
     result "concat(yml:lcase(substring($text,1,1)),substring($text,2))";
 }
 
+def "yml:capit" {
+    param "text", "''";
+    result "concat(yml:ucase(substring($text,1,1)),substring($text,2))";
+}
+

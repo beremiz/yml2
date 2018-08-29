@@ -233,8 +233,9 @@ class YF:
     def addValue(self, parm, value):
         if type(value) is str or type(value) is unicode:
             if value[0] != "'" and value[0] != '"':
-                value = "'" + value + "'"
-            self.values[parm] = u(evalPython(value))
+                self.values[parm] = u(value)
+            else:
+                self.values[parm] = u(evalPython(value))
         else:
             self.values[parm] = u(evalPython(u(value)))
 

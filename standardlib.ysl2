@@ -1,3 +1,5 @@
+// YML2 standardlib version 2.5.8
+
 function "yml:hex2dec" {
     param "hex";
     param "_result", 0;

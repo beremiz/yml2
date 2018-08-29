@@ -1,4 +1,4 @@
-# YML 2.5.6 language definition
+# YML 2.5.8 language definition
 
 # written by VB.
 
@@ -66,7 +66,7 @@ def parm_eq():      return [xmlSymbol, pyExp, pointer, macro], "=", [value, poin
 parm_eq.__name__ = "parm"
 _func = [symbol, ppointer, pointer, reference], _if(newSyntax, (-1, ("[", listing(parm), "]"))), 0, ("(", listing(parm), ")"), 0, listing(parm), -1, parm_eq
 def pythonCall():   return keyword("python"), _func, [";", "."]
-def declParm():     return [pointer, macro, xmlSymbol], 0, ("=", literal)
+def declParm():     return [pointer, macro, xmlSymbol], 0, ("=", [literal, symbol])
 def alias():        return keyword("alias"), aliasSymbol
 def descend():      return r(r"[+@*]" + _symbol, re.U)
 def base():         return keyword("is"), symbol

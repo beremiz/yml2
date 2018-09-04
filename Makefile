@@ -1,5 +1,5 @@
 YML_PATH=
-YML2C=yml2c
+YML2C=yml2/yml2c
 
 all: homepage
 

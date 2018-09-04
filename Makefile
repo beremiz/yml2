@@ -1,5 +1,7 @@
 YML_PATH=
 YML2C=yml2c
+PKGVER=$(shell python setup.py -V)
+DEBVER=1
 
 all: homepage
 
@@ -16,5 +18,18 @@ update-all: update yml2c yml2.py pyPEG.py backend.py yml2proc
 %.html: %.en.yhtml2 heading.en.yhtml2 homepage.en.yhtml2
 	$(YML2C) $< -o $@
 
+.PHONY: deb
+deb:  YML2_$(PKGVER).orig.tar.gz python-yml2_$(PKGVER)-$(DEBVER)_all.deb
+
+YML2_$(PKGVER).orig.tar.gz:
+	python setup.py sdist
+	mv -f dist/YML2-$(PKGVER).tar.gz YML2_$(PKGVER).orig.tar.gz
+
+python-yml2_$(PKGVER)-$(DEBVER)_all.deb:
+	python setup.py --command-packages=stdeb.command bdist_deb
+	mv -f deb_dist/python-yml2_$(PKGVER)-$(DEBVER)_all.deb .
+
 clean:
 	rm -f *.html *.pyc *.pyo
+	rm -f YML2_$(PKGVER).orig.tar.gz
+	rm -f python-yml2_$(PKGVER)-$(DEBVER)_all.deb

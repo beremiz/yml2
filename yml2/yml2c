@@ -28,6 +28,10 @@ def w(msg):
         msg = codecs.encode(msg, sys.stderr.encoding)
     sys.stderr.write(msg)
 
+
+def main():
+    pass
+
 optParser = OptionParser()
 optParser.add_option("-C", "--old-syntax", action="store_true", dest="old_syntax",
         help="syntax of YML 2 version 1.x (compatibility mode)", default=False)
@@ -94,3 +98,7 @@ except LookupError as msg:
 except Exception as msg:
     w(msg)
     sys.exit(5)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

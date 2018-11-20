@@ -1,4 +1,4 @@
-# YML 2.5.8 language definition
+# YML 2.5.9 language definition
 
 # written by VB.
 
@@ -77,7 +77,7 @@ def operator():     return 0, keyword("define"), keyword("operator"), literal, k
 def constant():     return 0, keyword("define"), [pointer, symbol], "=", literal, 0, [";", "."]
 def in_ns():        return keyword("in"), xmlSymbol, [_decl, ("{", -2, _decl, "}")]
 _decl = keyword("decl"), listing(decl), [";", "."]
-def textsection():  return r(r'(\|\|(\>*).*?\|\|(\>*))', re.S)
+def textsection():  return r(r'(\|\|(\>*)(.*?)\|\|(\>*))\s*$', re.S | re.M)
 def textsectionu(): return r(r'(\>\>.*?\>\>)', re.S)
 def include():      return keyword("include"), 0, reverse, 0, [ktext, kxml], filename, 0, [";", "."]
 def func():         return _func, 0, content

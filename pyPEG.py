@@ -4,10 +4,9 @@
 
 import re
 import sys, codecs
-import exceptions
 
-class keyword(unicode): pass
-class code(unicode): pass
+class keyword(str): pass
+class code(str): pass
 class ignore(object):
     def __init__(self, regex_text, *args):
         self.regex = re.compile(regex_text, *args)
@@ -18,10 +17,10 @@ class _and(object):
 
 class _not(_and): pass
 
-class Name(unicode):
+class Name(str):
     def __init__(self, *args):
         self.line = 0
-        self.file = u""
+        self.file = ""
 
 class Symbol(list):
     def __init__(self, name, what):
@@ -31,27 +30,15 @@ class Symbol(list):
         self.append(what)
     def __call__(self):
         return self.what
-    def __unicode__(self):
-        return u'Symbol(' + repr(self.__name__) + ', ' + repr(self.what) + u')'
+    def __str__(self):
+        return 'Symbol(' + repr(self.__name__) + ', ' + repr(self.what) + ')'
     def __repr__(self):
-        return unicode(self)
+        return str(self)
 
-word_regex = re.compile(ur"\w+")
-rest_regex = re.compile(ur".*")
+word_regex = re.compile(r"\w+")
+rest_regex = re.compile(r".*")
 
 print_trace = False
-
-def u(text):
-    if isinstance(text, exceptions.BaseException):
-        text = text.args[0]
-    if type(text) is unicode:
-        return text
-    if isinstance(text, str):
-        if sys.stdin.encoding:
-            return codecs.decode(text, sys.stdin.encoding)
-        else:
-            return codecs.decode(text, "utf-8")
-    return unicode(text)
 
 def skip(skipper, text, skipWS, skipComments):
     if skipWS:
@@ -104,7 +91,7 @@ class parser(object):
                 if print_trace:
                     try:
                         if _pattern.__name__ != "comment":
-                            sys.stderr.write(u"match: " + _pattern.__name__ + u"\n")
+                            sys.stderr.write("match: " + _pattern.__name__ + "\n")
                     except: pass
 
             if self.restlen == -1:
@@ -146,7 +133,7 @@ class parser(object):
                 if print_trace:
                     try:
                         if pattern.__name__ != "comment":
-                            sys.stderr.write(u"testing with " + pattern.__name__ + u": " + textline[:40] + u"\n")
+                            sys.stderr.write("testing with " + pattern.__name__ + ": " + textline[:40] + "\n")
                     except: pass
 
             if pattern.__name__[0] != "_":
@@ -160,7 +147,7 @@ class parser(object):
 
         pattern_type = type(pattern)
 
-        if pattern_type is str or pattern_type is unicode:
+        if pattern_type is str:
             if text[:len(pattern)] == pattern:
                 text = skip(self.skipper, text[len(pattern):], skipWS, skipComments)
                 return R(None, text)
@@ -251,11 +238,11 @@ class parser(object):
                 syntaxError()
 
         else:
-            raise SyntaxError(u"illegal type in grammar: " + u(pattern_type))
+            raise SyntaxError("illegal type in grammar: " + pattern_type)
 
     def lineNo(self):
-        if not(self.lines): return u""
-        if self.restlen == -1: return u""
+        if not(self.lines): return ""
+        if self.restlen == -1: return ""
         parsed = self.textlen - self.restlen
 
         left, right = 0, len(self.lines)
@@ -266,20 +253,20 @@ class parser(object):
                 try:
                     if self.lines[mid + 1][0] >= parsed:
                         try:
-                            return u(self.lines[mid + 1][1]) + u":" + u(self.lines[mid + 1][2])
+                            return self.lines[mid + 1][1] + ":" + self.lines[mid + 1][2]
                         except:
-                            return u""
+                            return ""
                     else:
                         left = mid + 1
                 except:
                     try:
-                        return u(self.lines[mid + 1][1]) + u":" + u(self.lines[mid + 1][2])
+                        return self.lines[mid + 1][1] + ":" + self.lines[mid + 1][2]
                     except:
-                        return u""
+                        return ""
             else:
                 right = mid - 1
             if left > right:
-                return u""
+                return ""
 
 # plain module API
 
@@ -308,14 +295,14 @@ def parse(language, lineSource, skipWS = True, skipComments = None, packrat = Fa
     while callable(language):
         language = language()
 
-    orig, ld = u"", 0
+    orig, ld = "", 0
     for line in lineSource:
         if lineSource.isfirstline():
             ld = 1
         else:
             ld += 1
         lines.append((len(orig), lineSource.filename(), lineSource.lineno() - 1))
-        orig += u(line)
+        orig += line
 
     textlen = len(orig)
 
@@ -331,10 +318,10 @@ def parse(language, lineSource, skipWS = True, skipComments = None, packrat = Fa
         if text:
             raise SyntaxError()
 
-    except SyntaxError, msg:
+    except SyntaxError as msg:
         parsed = textlen - p.restlen
         textlen = 0
-        nn, lineNo, file = 0, 0, u""
+        nn, lineNo, file = 0, 0, ""
         for n, ld, l in lines:
             if n >= parsed:
                 break
@@ -346,6 +333,6 @@ def parse(language, lineSource, skipWS = True, skipComments = None, packrat = Fa
         lineNo += 1
         nn -= 1
         lineCont = orig.splitlines()[nn]
-        raise SyntaxError(u"syntax error in " + u(file) + u":" + u(lineNo) + u": " + lineCont)
+        raise SyntaxError("syntax error in " + file + ":" + lineNo + ": " + lineCont)
 
     return result

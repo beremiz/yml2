@@ -1,13 +1,19 @@
 include yslt.yml2
 
-stylesheet {
+estylesheet {
     template "/list" html {
         head title "address list";
-        body table style="border-style=solid;" apply "address";
+        body table style="border-style=solid;"
+            apply "address";
     }
     template "address" tr {
         td value "name";
         td value "street";
-        td value "city";
+        td value "village";
+    }
+    template "address[name='Schmidt']" tr {
+        td value "name";
+        td value "street";
+        td value "village";
     }
 }

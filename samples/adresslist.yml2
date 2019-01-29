@@ -1,0 +1,12 @@
+list {
+    address {
+        name "Meier";
+        street "Uhlmannstrasse 42";
+        village "Laupheim";
+    }
+    address {
+        name "Schmidt";
+        street "Haupstrasse 23";
+        village "Bad Waldsee";
+    }
+}

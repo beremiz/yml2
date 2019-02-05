@@ -1,4 +1,4 @@
-# YML 2.5.9 language definition
+# YML 2.5.10 language definition
 
 # written by VB.
 
@@ -51,7 +51,7 @@ _xmlSymbol = u"(" + NameStartChar + u")(" + NameChar + u")*"
 xmlSymbol = r(_xmlSymbol)
 aliasSymbol = r(ur"-|(" + _xmlSymbol + ur")")
 
-literal = [r(r'""".*?"""', re.S), r(r"'''.*?'''", re.S), r(r"""-?\d+\.\d*|-?\.\d+|-?\d+|".*?"|'.*?'""")]
+literal = [r(r'""".*?"""', re.S), r(r"'''.*?'''", re.S), r(r"""0x[a-f0-9]+|-?\d+\.\d*|-?\.\d+|-?\d+|".*?"|'.*?'""")]
 filename = [("'", r(r"[^']*"), "'"), ('"', r(r'[^"]*'), '"'), r(r"[^\s;]+")]
 ws = r(r"\s+", re.U)
 

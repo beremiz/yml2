@@ -1,4 +1,4 @@
-# 2.5.8 backend
+# 2.5.10 backend
 
 # written by VB.
 
@@ -6,7 +6,7 @@ import re, codecs
 import fileinput
 import sys, traceback, exceptions, os
 from xml.sax.saxutils import escape, quoteattr
-from copy import deepcopy
+from copy import copy, deepcopy
 from glob import glob
 from pyPEG import code, parse, parseLine, u, Symbol
 from yml2 import ymlCStyle, comment, _inner
@@ -495,11 +495,15 @@ def codegen(obj):
 
         try:
             ymlFunc[name]
-        except:
+        except KeyError:
             try:
-                ymlFunc["_"]
-                return codegen(('func', ['_', ('content', [('funclist', [obj])])]))
-            except:
+                if ymlFunc["_"].alias != u"-":
+                    return codegen(('func', ['_', ('content', [('funclist', [obj])])]))
+                else:
+                    ymlFunc[name] = copy(ymlFunc["_"])
+                    ymlFunc[name].alias = name.replace("_", "-")
+                    return codegen(obj)
+            except KeyError:
                 ymlFunc[name] = YF(name)
         
         if ymlFunc[name].alias == "-": avoidTag = True

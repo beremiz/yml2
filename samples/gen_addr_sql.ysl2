@@ -1,0 +1,15 @@
+include yslt.yml2
+
+tstylesheet {
+    template "/list" {
+        apply "address", 0;
+        | 1000 FOR I=1 TO 2 STEP 1
+        | 1010 READ NAME$, STREET$, VILLAGE$
+        | 1020 PRINT "INSERT INTO address (name, street, village) VALUES ('" + NAME$ + "', '" + STREET$ + "', '" + VILLAGE$ + "');"
+        | 1030 NEXT I
+    }
+    template "address" {
+        | «position() * 10 + 100» DATA "«name»", "«street»", "«village»"
+    }
+}
+

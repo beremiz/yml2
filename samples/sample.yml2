@@ -1,7 +1,0 @@
-include idl.yml2
-
-module blub {
-    interface bla {
-        int f(in long a, out long b);
-    }
-}

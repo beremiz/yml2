@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # vim: set fileencoding=utf-8 :
 
 """\
-YML 2 compiler version 5.10
-Copyleft (c), 2009-2018, Volker Birk  http://fdik.org/yml/
+YML 2 compiler version 6.0
+Copyleft (c), 2009-2019, Volker Birk  http://fdik.org/yml/
 
 """
 
@@ -24,7 +24,7 @@ def w(msg):
             msg = str(msg) + "\n"
         except:
             msg = u(msg) + u"\n"
-    if type(msg) is unicode:
+    if type(msg) is bytes:
         msg = codecs.encode(msg, sys.stderr.encoding)
     sys.stderr.write(msg)
 
@@ -76,11 +76,12 @@ try:
             result = unicodedata.normalize(options.normalization, result)
 
         if options.outputFile and options.outputFile != "-":
-            outfile = open(options.outputFile, "w")
+            outfile = open(options.outputFile, "wb")
             outfile.write(codecs.encode(result, options.encoding))
             outfile.close()
         else:
-            print(codecs.encode(result, options.encoding))
+            sys.stdout.buffer.write(codecs.encode(result, options.encoding))
+            print()
 
 except KeyboardInterrupt:
     w("\n")

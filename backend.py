@@ -1,10 +1,10 @@
-# 2.5.10 backend
+# 2.6.0 backend
 
 # written by VB.
 
 import re, codecs
 import fileinput
-import sys, traceback, exceptions, os
+import sys, traceback, os
 from xml.sax.saxutils import escape, quoteattr
 from copy import copy, deepcopy
 from glob import glob
@@ -12,9 +12,9 @@ from pyPEG import code, parse, parseLine, u, Symbol
 from yml2 import ymlCStyle, comment, _inner
 
 ymlFunc, pointers, pythonFunc = {}, {}, {}
-in_ns = u""
+in_ns = ""
 operator = []
-included = u""
+included = ""
 includePath = []
 emitlinenumbers = False
 encoding = "utf-8"
@@ -29,9 +29,9 @@ ymlFunc["operator"] = "#error"
 def clearAll():
     global ymlFunc, pointers, pythonFunc, in_ns, operator, included
     ymlFunc, pointers, pythonFunc = {}, {}, {}
-    in_ns = u""
+    in_ns = ""
     operator = []
-    included = u""
+    included = ""
 
 lq = re.compile(r"\|(\>*)(.*)")
 sq = re.compile(r"(\d*)\>(.*)")
@@ -48,84 +48,84 @@ def pointer(name):
         return u(pointers[name[1:]])
     except:
         if name == "*_trace_info":
-            return u'""'
+            return '""'
         if included:
-            raise LookupError(u"in " + included + u":" + u(line) + u": pointer " + name)
+            raise LookupError("in " + included + ":" + u(line) + ": pointer " + name)
         else:
-            raise LookupError(u"in " + u(line) + u": pointer " + name)
+            raise LookupError("in " + u(line) + ": pointer " + name)
 
 def evalPython(expr):
     try:
         result = eval(u(expr), pythonFunc)
-        if type(result) is str:
+        if type(result) is bytes:
             return codecs.decode(result, encoding)
         else:
             return result
     except:
         name, parm, tb = sys.exc_info()
-        msg = u"in python expression: " + u(parm)
-        if name is exceptions.SyntaxError:
+        msg = "in python expression: " + u(parm)
+        if name is SyntaxError:
             tbl = traceback.format_exception(name, parm, tb)
-            msg += u"\n" + tbl[-3] + tbl[-2]
+            msg += "\n" + tbl[-3] + tbl[-2]
         else:
-            msg += u": " + expr + u"\n"
+            msg += ": " + expr + "\n"
         if included:
-            raise name(u"in " + included + u":" + u(line) + u": " + msg)
+            raise name("in " + included + ":" + u(line) + ": " + msg)
         else:
-            raise name(u"in " + u(line) + u": " + msg)
+            raise name("in " + u(line) + ": " + msg)
     
 def execPython(script):
     try:
-        if type(script) is unicode:
-            exec script in pythonFunc
+        if type(script) is str:
+            exec(script, pythonFunc)
         else:
-            exec codecs.decode(script, encoding) in pythonFunc
+            exec(codecs.decode(script, encoding), pythonFunc)
     except:
         name, parm, tb = sys.exc_info()
-        msg = u"in python script: " + u(parm)
-        if name is exceptions.SyntaxError:
+        msg = "in python script: " + u(parm)
+        if name is SyntaxError:
             tbl = traceback.format_exception(name, parm, tb)
-            msg += u"\n" + tbl[-3] + tbl[-2]
+            msg += "\n" + tbl[-3] + tbl[-2]
         else:
-            msg += u": " + expr + u"\n"
+            msg += ": " + expr + "\n"
         if included:
-            raise name(u"in " + included + u":" + u(line) + u": " + msg)
+            raise name("in " + included + ":" + u(line) + ": " + msg)
         else:
-            raise name(u"in " + u(line) + u": " + msg)
+            raise name("in " + u(line) + ": " + msg)
 
 def textOut(text):
     if not text:
-        return u""
-    if type(text) is not unicode:
+        return ""
+    if type(text) is not str:
         text = codecs.decode(text, encoding)
     text = text.replace(r'\"', r'\\"')
-    text = u'u"""' + text.replace('"', r'\"') + u'"""'
+    text = '"""' + text.replace('"', r'\"') + '"""'
     try:
         textFunc = ymlFunc["text"]
         parms = ['text', ('parm', [text])]
         c, result = textFunc(parms)
         if c:
-            if type(textFunc.alias) is unicode:
-                result += u"</" + textFunc.alias + u">"
+            if type(textFunc.alias) is str:
+                result += "</" + textFunc.alias + ">"
             else:
-                result += u"</" + codecs.decode(textFunc.alias, encoding) + u">"
+                result += "</" + codecs.decode(textFunc.alias, encoding) + ">"
         return result
     except:
         return escape(eval(text))
 
 def strRepl(text):
     if not text:
-        return u""
-    if type(text) is not unicode:
+        return ""
+    if type(text) is not str:
         text = codecs.decode(text, encoding)
     text = text.replace(r'\"', r'\\"')
-    text = u'u"""' + text.replace('"', r'\"') + u'"""'
-    if type(text) is unicode:
+    text = '"""' + text.replace('"', r'\"') + '"""'
+    if type(text) is str:
         return escape(eval(text))
 
 def applyMacros(macros, text):
     result = text
-    for key, value in macros.iteritems():
+    for key, value in macros.items():
         result = result.replace(key, value)
     return result
 
@@ -139,7 +139,7 @@ class YF:
         self.pointers = {}
         self.macros = {}
         if in_ns:
-            self.alias = in_ns + u":" + name.replace("_", "-")
+            self.alias = in_ns + ":" + name.replace("_", "-")
         else:
             self.alias = name.replace("_", "-")
         pythonFunc["yml_" + name] = self
@@ -205,13 +205,13 @@ class YF:
                     hasContent = True
 
         if enable_tracing:
-            text = u(parms) + u", " + u(vals)
-            pointers["_trace_info"] = u'"' + u(line) + u": " + u(self.name) + u" " + text.replace(u'"', u'#') + u'"'
+            text = u(parms) + ", " + u(vals)
+            pointers["_trace_info"] = '"' + u(line) + ": " + u(self.name) + " " + text.replace('"', '#') + '"'
 
         if emitlinenumbers:
             global first
             if first:
-                vals["xmlns:yml"] = u"http://fdik.org/yml"
+                vals["xmlns:yml"] = "http://fdik.org/yml"
                 first = False
             vals["yml:called"] = u(line)
         return self.xml(parms, vals, hasContent, avoidTag)
@@ -231,7 +231,7 @@ class YF:
             self.descends.append(desc)
 
     def addValue(self, parm, value):
-        if type(value) is str or type(value) is unicode:
+        if type(value) is str or type(value) is str:
             if value[0] != "'" and value[0] != '"':
                 self.values[parm] = u(value)
             else:
@@ -241,7 +241,7 @@ class YF:
 
     def xml(self, callParms, callValues, hasContent, avoidTag = False):
         global pointers
-        extraContent = u""
+        extraContent = ""
         if self.content:
             hasContent = True
         resultParms = self.values.copy()
@@ -250,7 +250,7 @@ class YF:
         for key in toDelete:
             if key[0] == "*":
                 del resultParms[key]
-        for key, value in callValues.iteritems():
+        for key, value in callValues.items():
             if key[0] == "%":
                 macros[key] = value
             else:
@@ -261,9 +261,9 @@ class YF:
                 if self.parms[i][0] == "*":
                     cp = u(cp)
                     if "'" in cp:
-                        pointers[self.parms[i][1:]] = u'"' + cp + u'"'
+                        pointers[self.parms[i][1:]] = '"' + cp + '"'
                     else:
-                        pointers[self.parms[i][1:]] = u"'" + cp + u"'"
+                        pointers[self.parms[i][1:]] = "'" + cp + "'"
                 elif self.parms[i][0] == "%":
                     macros[self.parms[i]] = u(cp)
                 else:
@@ -272,21 +272,21 @@ class YF:
                 extraContent += u(cp)
                 hasContent = True
             i += 1
-        result = u""
-        for p, v in resultParms.iteritems():
+        result = ""
+        for p, v in resultParms.items():
             if p[0] == "'" or p[0] == '"':
                 p = eval(p)
-            result += u" "+ p + u"=" + quoteattr(applyMacros(macros, u(v)))
+            result += " "+ p + "=" + quoteattr(applyMacros(macros, u(v)))
         if hasContent:
             if avoidTag:
                 return True, strRepl(extraContent)
             else:
-                return True, u"<" + self.alias + result + u">" + strRepl(extraContent)
+                return True, "<" + self.alias + result + ">" + strRepl(extraContent)
         else:
             if avoidTag:
-                return False, u""
+                return False, ""
             else:
-                return False, u"<" + self.alias + result + u"/>"
+                return False, "<" + self.alias + result + "/>"
 
 def replaceContent(tree, subtree):
     n = 0
@@ -313,7 +313,7 @@ def replaceContent(tree, subtree):
     return tree
 
 def executeCmd(text):
-    if type(text) is not unicode:
+    if type(text) is not str:
         text = codecs.decode(text, encoding)
     for (regex, pattern) in operator:
         match = re.search(regex, text)
@@ -321,11 +321,11 @@ def executeCmd(text):
             cmd = pattern
             opt = match.groups()
             for i in range(len(opt)):
-                cmd = cmd.replace(u"%" + u(i+1), opt[i])
-            text = text[:match.start()] + u"`" + cmd + u"`"+ text[match.end():]
+                cmd = cmd.replace("%" + u(i+1), opt[i])
+            text = text[:match.start()] + "`" + cmd + "`"+ text[match.end():]
             match = re.search(regex, text)
 
-    result = u""
+    result = ""
     m = re.search(bq, text)
     while text and m:
         cmd  = m.group(1)
@@ -336,9 +336,9 @@ def executeCmd(text):
             if rest: raise SyntaxError(cmd)
         except SyntaxError:
             if included:
-                raise SyntaxError(u"in " + included + u":" + u(line) + u": syntax error in executing command: " + cmd.strip())
+                raise SyntaxError("in " + included + ":" + u(line) + ": syntax error in executing command: " + cmd.strip())
             else:
-                raise SyntaxError(u"in " + u(line) + u": syntax error in executing command: " + cmd.strip())
+                raise SyntaxError("in " + u(line) + ": syntax error in executing command: " + cmd.strip())
         inner = _finish(r)
         result += head + inner
         m = re.search(bq, text)
@@ -358,20 +358,20 @@ def codegen(obj):
     except: pass
 
     if ctype == "empty":
-        return code(u"")
+        return code("")
 
     if ctype == "in_ns":
         in_ns = obj[1][0]
         subtree = obj[1]
         for sel in subtree:
             codegen(sel)
-        in_ns = u""
-        return code(u"")
+        in_ns = ""
+        return code("")
 
     elif ctype == "decl":
-        name = u""
+        name = ""
         for data in obj[1]:
-            if type(data) is unicode or type(data) is str:
+            if type(data) is str:
                 name = data
                 try:
                     yf = ymlFunc[name]
@@ -380,7 +380,7 @@ def codegen(obj):
                     ymlFunc[name] = YF(name)
                     yf = ymlFunc[name]
                     if in_ns:
-                        yf.alias = in_ns + u":" + name
+                        yf.alias = in_ns + ":" + name
                         if not enable_tracing:
                             if in_ns == "xsl" and (name == "debug" or name=="assert" or name[:7]=="_trace_"):
                                 yf.alias = "-"
@@ -394,9 +394,9 @@ def codegen(obj):
                         yf = ymlFunc[name] = ymlFunc[base].copy(name)
                     except KeyError:
                         if included:
-                            raise KeyError(u"in " + included + u":" + u(line) + u": " + base + u" as base for " + name)
+                            raise KeyError("in " + included + ":" + u(line) + ": " + base + " as base for " + name)
                         else:
-                            raise KeyError(u"in " + u(line) + u": " + base + u" as base for " + name)
+                            raise KeyError("in " + u(line) + ": " + base + " as base for " + name)
                 elif data[0] == "shape":
                     shape = ymlFunc[data[1]]
                     try:
@@ -404,9 +404,9 @@ def codegen(obj):
                         yf.patch(shape)
                     except KeyError:
                         if included:
-                            raise KeyError(u"in " + included + u":" + u(line) + u": " + base + u" as shape for " + name)
+                            raise KeyError("in " + included + ":" + u(line) + ": " + base + " as shape for " + name)
                         else:
-                            raise KeyError(u"in " + u(line) + u": " + base + u" as shape for " + name)
+                            raise KeyError("in " + u(line) + ": " + base + " as shape for " + name)
                 elif data[0] == "descend":
                     yf.addDescend(data[1])
                 elif data[0] == "declParm":
@@ -422,23 +422,23 @@ def codegen(obj):
                             yf.pointers[parmName[1:]] = value
                             yf.addParm(parmName)
                         elif parmName[0] == "%":
-                            if type(value) is unicode or type(value) is str:
+                            if type(value) is str:
                                 yf.macros[parmName] = u(evalPython(value))
                             else:
                                 yf.macros[parmName] = u(evalPython(u(value)))
                             yf.addParm(parmName)
                 elif data[0] == "alias":
                     if in_ns:
-                        yf.alias = in_ns + u":" + data[1][0]
+                        yf.alias = in_ns + ":" + data[1][0]
                     else:
                         yf.alias = data[1][0]
                 elif data[0] == "content":
                     yf.content = data[1]
 
-        return code(u"")
+        return code("")
 
     elif ctype == "funclist":
-        result = u""
+        result = ""
         for f in obj[1]:
             result += codegen(f)
         return code(result)
@@ -447,13 +447,13 @@ def codegen(obj):
         if len(obj[1]):
             return codegen(('func', ['_parentheses', ('content', [obj[1][0]])]))
         else:
-            return u""
+            return ""
 
     elif ctype == "fparm":
         if len(obj[1]):
             return codegen(('func', ['_parm', ('content', [obj[1][0]])]))
         else:
-            return u""
+            return ""
 
     elif ctype == "generic":
         return codegen(('func', ['_generic', ('content', [obj[1][0]])]))
@@ -468,15 +468,15 @@ def codegen(obj):
         if name == "decl":
             if ymlFunc[name] == "#error":
                 if included:
-                    raise SyntaxError(u"in " + included + u":" + u(line) + u": syntax error in decl statement")
+                    raise SyntaxError("in " + included + ":" + u(line) + ": syntax error in decl statement")
                 else:
-                    raise SyntaxError(u"in " + u(line) + u": syntax error in decl statement")
+                    raise SyntaxError("in " + u(line) + ": syntax error in decl statement")
         if name == "define" or name == "operator":
             if ymlFunc[name] == "#error":
                 if included:
-                    raise SyntaxError(u"in " + included + u":" + u(line) + u": syntax error in define statement")
+                    raise SyntaxError("in " + included + ":" + u(line) + ": syntax error in define statement")
                 else:
-                    raise SyntaxError(u"in " + u(line) + u": syntax error in define statement")
+                    raise SyntaxError("in " + u(line) + ": syntax error in define statement")
 
         if name[0] == "&":
             avoidTag = True
@@ -485,7 +485,7 @@ def codegen(obj):
 
         if len(name) > 2:
             if name[0:2] == "**":
-                return code(eval('u'+pointer(name[1:])))
+                return code(eval(''+pointer(name[1:])))
 
         if name[0] == "*":
             name = eval(pointer(name))
@@ -497,7 +497,7 @@ def codegen(obj):
             ymlFunc[name]
         except KeyError:
             try:
-                if ymlFunc["_"].alias != u"-":
+                if ymlFunc["_"].alias != "-":
                     return codegen(('func', ['_', ('content', [('funclist', [obj])])]))
                 else:
                     ymlFunc[name] = copy(ymlFunc["_"])
@@ -512,9 +512,9 @@ def codegen(obj):
         if len(ymlFunc[name].descends):
             if obj[1][-1][0] != 'content':
                 if included:
-                    raise KeyError(u"in " + included + u":" + u(line) + u": " + name + u" has descending attributes, but no descendants are following")
+                    raise KeyError("in " + included + ":" + u(line) + ": " + name + " has descending attributes, but no descendants are following")
                 else:
-                    raise KeyError(u"in " + u(line) + u": " + name + u" has descending attributes, but no descendants are following")
+                    raise KeyError("in " + u(line) + ": " + name + " has descending attributes, but no descendants are following")
 
             def first_func(obj):
                 if type(obj) is tuple or type(obj) is Symbol:
@@ -563,7 +563,7 @@ def codegen(obj):
                         if dname[0] == "*":
                             pointers[dname[1:]] = "'" + f[1][0] + "'"
                         else:
-                            add_params.append( ('parm', [dname, u"'" + f[1][0] + u"'"]) )
+                            add_params.append( ('parm', [dname, "'" + f[1][0] + "'"]) )
                         try:
                             add_params.extend( get_parms(f) )
                         except: pass
@@ -575,14 +575,14 @@ def codegen(obj):
                     to_add.append( ('func', new_things ) )
             except:
                 if included:
-                    raise KeyError(u"in " + included + u":" + u(line) + u": " + name + u" has descending attributes, and too less descendants are following")
+                    raise KeyError("in " + included + ":" + u(line) + ": " + name + " has descending attributes, and too less descendants are following")
                 else:
-                    raise KeyError(u"in " + u(line) + u": " + name + u" has descending attributes, and too less descendants are following")
+                    raise KeyError("in " + u(line) + ": " + name + " has descending attributes, and too less descendants are following")
 
         if not to_add:
             to_add = ( obj, )
 
-        complete = u""
+        complete = ""
 
         for obj in to_add:
             subtree = None
@@ -606,14 +606,14 @@ def codegen(obj):
                     result += codegen(sel)
 
             if hasContent and not(avoidTag):
-                result += u"</" + ymlFunc[name].alias + u">"
+                result += "</" + ymlFunc[name].alias + ">"
 
             complete += result
 
         return code(complete)
 
     elif ctype == "textsection":
-        result = u''
+        result = ''
         ll = obj[1].splitlines()
         space = len(ll[-1]) - 2
         for l in ll[1:-1]:
@@ -626,15 +626,15 @@ def codegen(obj):
                     result += _finish(r)
                 except SyntaxError:
                     if included:
-                        raise SyntaxError(u"in " + included + u":" + u(line) + u": syntax error in executing command: " + cmd.strip())
+                        raise SyntaxError("in " + included + ":" + u(line) + ": syntax error in executing command: " + cmd.strip())
                     else:
-                        raise SyntaxError(u"in " + u(line) + u": syntax error in executing command: " + cmd.strip())
+                        raise SyntaxError("in " + u(line) + ": syntax error in executing command: " + cmd.strip())
             else:
-                result += codegen(Symbol(u'lineQuote', u'| ' + l[space:]))
+                result += codegen(Symbol('lineQuote', '| ' + l[space:]))
         return code(result)
 
-    elif ctype == "textsectionu":
-        result = u''
+    elif ctype == "textsection":
+        result = ''
         ll = obj[1].splitlines()
         space = len(ll[-1]) - 2
         for l in ll[1:-1]:
@@ -647,16 +647,16 @@ def codegen(obj):
                     result += _finish(r)
                 except SyntaxError:
                     if included:
-                        raise SyntaxError(u"in " + included + u":" + u(line) + u": syntax error in executing command: " + cmd.strip())
+                        raise SyntaxError("in " + included + ":" + u(line) + ": syntax error in executing command: " + cmd.strip())
                     else:
-                        raise SyntaxError(u"in " + u(line) + u": syntax error in executing command: " + cmd.strip())
+                        raise SyntaxError("in " + u(line) + ": syntax error in executing command: " + cmd.strip())
             else:
-                if result != u'': result += u' '
-                result += codegen(Symbol(u'quote', [u'> ' + l[space:]]))
+                if result != '': result += ' '
+                result += codegen(Symbol('quote', ['> ' + l[space:]]))
         return code(result)
 
     elif ctype == "lineQuote" or ctype == "quote":
-        m, text, base, inds = None, u"", 0, 0
+        m, text, base, inds = None, "", 0, 0
 
         if ctype == "lineQuote":
             text = obj[1]
@@ -674,20 +674,20 @@ def codegen(obj):
                     inds = int(m.group(1))
                 text = m.group(2)[1:]
             else:
-                if type(text) is unicode or type(text) is str:
+                if type(text) is str:
                     text = u(evalPython(text))
 
-        ind = u""
+        ind = ""
         if inds > -1:
             try:
-                cmd = evalPython(u"indent(" + u(inds) + u")")
+                cmd = evalPython("indent(" + u(inds) + ")")
                 result, rest = parseLine(u(cmd), _inner, [], True, comment)
                 if rest:
                     raise SyntaxError()
                 ind = _finish(result)
             except: pass
         
-        if ctype == "lineQuote": text += u"\n"
+        if ctype == "lineQuote": text += "\n"
 
         hasTextFunc = False
         try:
@@ -701,13 +701,13 @@ def codegen(obj):
     elif ctype == "tagQuote":
         m = tq.match(obj[1])
         if m.group(1) == "<":
-            return code(u"<" + m.group(2))
+            return code("<" + m.group(2))
         else:
             return code(m.group(2))
 
     elif ctype == "operator":
         operator.append((re.compile(evalPython(obj[1][0])), obj[1][1]))
-        return code(u"")
+        return code("")
 
     elif ctype == "constant":
         name = obj[1][0]
@@ -715,7 +715,7 @@ def codegen(obj):
             name = name[1:]
         value = obj[1][1]
         pointers[name] = value
-        return code(u"")
+        return code("")
 
     elif ctype == "include":
         reverse = False
@@ -728,7 +728,7 @@ def codegen(obj):
                     ktext = True
                 elif arg[0] == "kxml":
                     kxml = True
-            elif type(arg) is unicode or type(arg) is str:
+            elif type(arg) is str:
                 filemask = arg
 
         if filemask[0] == '/' or filemask[0] == '.':
@@ -744,14 +744,14 @@ def codegen(obj):
 
         if not(files):
             if included:
-                raise IOError(u"in " + included + ":" + u(line) + u": include file(s) '" + filemask + u"' not found")
+                raise IOError("in " + included + ":" + u(line) + ": include file(s) '" + filemask + "' not found")
             else:
-                raise IOError(u"in " + u(line) + u": include file(s) '" + filemask + u"' not found")
+                raise IOError("in " + u(line) + ": include file(s) '" + filemask + "' not found")
 
         includeFile = fileinput.input(files, mode="rU", openhook=fileinput.hook_encoded(encoding))
         _included = included
         if ktext or kxml:
-            text = u""
+            text = ""
             for line in includeFile:
                 included = includeFile.filename()
                 if kxml:
@@ -780,7 +780,7 @@ def codegen(obj):
         parms = []
         data = obj[1]
         for p in data:
-            if type(p) is unicode or type(p) is str:
+            if type(p) is str:
                 name = p
             elif type(p) is tuple or type(p) is Symbol:
                 ptype = p[0]
@@ -790,9 +790,9 @@ def codegen(obj):
                     else:
                         parms.append(p[1][0])
         if len(parms) == 0:
-            exp = name + u"()"
+            exp = name + "()"
         elif len(parms) == 1:
-            exp = name + u"(" + u(parms[0]) + u")"
+            exp = name + "(" + u(parms[0]) + ")"
         else:
             exp = name + u(tuple(parms))
         cmd = evalPython(exp)
@@ -802,31 +802,31 @@ def codegen(obj):
         return code(_finish(result))
 
     else:
-        return code(u"")
+        return code("")
 
 def _finish(tree):
-    result = u""
-    python = u""
+    result = ""
+    python = ""
 
     for el in tree:
         if el[0] == "python":
             if el[1][0][:2] == "!!":
                 python += el[1][0][2:-2]
             else:
-                python += el[1][0][1:] + u"\n"
+                python += el[1][0][1:] + "\n"
             continue
         else:
             if python:
                 execPython(python)
-                python = u""
+                python = ""
 
         try:
             result += codegen(el)
         except RuntimeError:
             if included:
-                raise RuntimeError(u"in " + included + u":" + u(line))
+                raise RuntimeError("in " + included + ":" + u(line))
             else:
-                raise RuntimeError(u"in " + u(line))
+                raise RuntimeError("in " + u(line))
 
     if python:
         execPython(python)

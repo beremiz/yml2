@@ -246,7 +246,7 @@ class YF:
             hasContent = True
         resultParms = self.values.copy()
         macros = self.macros.copy()
-        toDelete = resultParms.keys()
+        toDelete = [ key for key in resultParms.keys() ]
         for key in toDelete:
             if key[0] == "*":
                 del resultParms[key]

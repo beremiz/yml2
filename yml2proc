@@ -32,9 +32,7 @@ def w(msg):
         try:
             msg = str(msg) + "\n"
         except:
-            msg = u(msg) + u"\n"
-    if type(msg) is str:
-        msg = codecs.encode(msg, sys.stderr.encoding)
+            msg = u(msg) + "\n"
     sys.stderr.write(msg)
 
 optParser = OptionParser()
@@ -114,7 +112,7 @@ if  (options.xslt and options.yslt) or (options.xslt and options.xpath) or (opti
 try:
     ymlC = ymlCStyle()
 
-    rtext = u""
+    rtext = ""
 
     if not options.emptyinput:
         files = fileinput.input(args, mode="rU", openhook=fileinput.hook_encoded(options.encoding))
@@ -132,7 +130,7 @@ try:
                 rtext = backend.finish(result)
 
     if not rtext:
-        rtext = u"<empty/>"
+        rtext = "<empty/>"
 
     def ymldebug(context, text):
         if options.trace:
@@ -153,7 +151,7 @@ try:
     if options.xpath:
         tree = etree.fromstring(rtext)
         ltree = tree.xpath(codecs.decode(options.xpath, options.encoding))
-        rtext = u""
+        rtext = ""
         try:
             for rtree in ltree:
                 rtext += etree.tostring(rtree, pretty_print=options.pretty, encoding=unicode)
@@ -186,7 +184,7 @@ try:
                     params[key] = u(value)
         if options.stringparams:
             for key, value in eval(options.stringparams).iteritems():
-                params[key] = u"'" + u(value) + u"'"
+                params[key] = "'" + u(value) + "'"
 
         rresult = transform(doc, **params)
         # lxml is somewhat buggy
@@ -226,18 +224,18 @@ except KeyboardInterrupt:
     w("\n")
     sys.exit(1)
 except YMLAssert as msg:
-    w(u"YML Assertion failed: " + u(msg) + u"\n")
+    w("YML Assertion failed: " + u(msg) + "\n")
     sys.exit(2)
 except KeyError as msg:
-    w(u"not found: " + u(msg) + u"\n")
+    w("not found: " + u(msg) + "\n")
     sys.exit(4)
 except LookupError as msg:
-    w(u"not found: " + u(msg) + u"\n")
+    w("not found: " + u(msg) + "\n")
     sys.exit(4)
 except etree.XMLSyntaxError as e:
     log = e.error_log.filter_from_level(etree.ErrorLevels.FATAL)
     for entry in log:
-        w(u"XML error: " + u(entry.message) + u"\n")
+        w("XML error: " + u(entry.message) + "\n")
     sys.exit(5)
 except Exception as msg:
     w(msg)

@@ -1,4 +1,4 @@
-# 2.6.0 backend
+# 2.6.1 backend
 
 # written by VB.
 
@@ -633,7 +633,7 @@ def codegen(obj):
                 result += codegen(Symbol('lineQuote', '| ' + l[space:]))
         return code(result)
 
-    elif ctype == "textsection":
+    elif ctype == "textsectionu":
         result = ''
         ll = obj[1].splitlines()
         space = len(ll[-1]) - 2

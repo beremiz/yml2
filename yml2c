@@ -17,6 +17,7 @@ import backend
 
 def printInfo(option, opt_str, value, parser):
     sys.stdout.write(__doc__)
+    sys.exit(0)
 
 def w(msg):
     if isinstance(msg, BaseException):

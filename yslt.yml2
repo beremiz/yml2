@@ -49,7 +49,7 @@ in xsl {
         output *output;
         const "space", !"'" + " " * 200 + "'"!;
         param "autoindent", 4;
-        xsl:template "text()";
+        xsl:template match="text()";
         content;
     }, tstylesheet is textstylesheet;
 

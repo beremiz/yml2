@@ -18,3 +18,4 @@ update-all: update yml2c yml2.py pyPEG.py backend.py yml2proc
 
 clean:
 	rm -f *.html *.pyc *.pyo */*.pyc */*.pyo
+	rm -rf *.egg-info

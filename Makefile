@@ -1,5 +1,6 @@
 YML_PATH=
 YML2C=yml2c
+PKGVER=$(shell python setup.py -V)
 
 all: homepage
 
@@ -19,3 +20,9 @@ update-all: update yml2c yml2.py pyPEG.py backend.py yml2proc
 clean:
 	rm -f *.html *.pyc *.pyo */*.pyc */*.pyo
 	rm -rf *.egg-info
+
+
+dist: dist/yml-$(PKGVER).tar.gz
+
+dist/yml-$(PKGVER).tar.gz:
+	python setup.py sdist

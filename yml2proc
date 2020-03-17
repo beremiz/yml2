@@ -18,8 +18,8 @@ except:
     sys.exit(1)
 
 from yml2 import ymlCStyle, comment, oldSyntax
-from pyPEG import parse, u
-import backend
+from yml2.pyPEG import parse, u
+import yml2.backend as backend
 
 def printInfo(option, opt_str, value, parser):
     sys.stdout.write(__doc__)

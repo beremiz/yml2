@@ -8,8 +8,8 @@ import sys, traceback, os
 from xml.sax.saxutils import escape, quoteattr
 from copy import copy, deepcopy
 from glob import glob
-from pyPEG import code, parse, parseLine, u, Symbol
-from yml2 import ymlCStyle, comment, _inner
+from .pyPEG import code, parse, parseLine, u, Symbol
+from . import ymlCStyle, comment, _inner
 
 ymlFunc, pointers, pythonFunc = {}, {}, {}
 in_ns = ""

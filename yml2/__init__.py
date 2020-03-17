@@ -3,7 +3,7 @@
 # written by VB.
 
 import re
-from pyPEG import keyword, _and, _not
+from .pyPEG import keyword, _and, _not
 
 # pyPEG:
 #

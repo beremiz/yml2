@@ -15,6 +15,8 @@ from yml2.pyPEG import parse, u
 from yml2 import ymlCStyle, comment, oldSyntax
 import yml2.backend as backend
 
+YML_DEFAULT_PATH = [os.path.dirname(backend.__file__)]
+
 def printInfo(option, opt_str, value, parser):
     sys.stdout.write(__doc__)
     sys.exit(0)
@@ -58,7 +60,7 @@ try:
     if options.includePathText:
         backend.includePath = options.includePathText.split(':')
 
-    dirs = os.environ.get('YML_PATH', '.').split(':')
+    dirs = os.environ.get('YML_PATH', '.').split(':') + YML_DEFAULT_PATH
     backend.includePath.extend(dirs)
 
     files = fileinput.input(args, mode="rU", openhook=fileinput.hook_encoded(options.encoding))

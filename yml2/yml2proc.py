@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # vim: set fileencoding=utf-8 :
 
 """\
-YML/YSLT 2 processor version 5.10
-Copyleft (c), 2009-2018 Volker Birk  http://fdik.org/yml/
+YML/YSLT 2 processor version 6.2
+Copyleft (c), 2009-2019 Volker Birk  http://fdik.org/yml/
 
 """
 
@@ -32,11 +32,8 @@ def w(msg):
         try:
             msg = str(msg) + "\n"
         except:
-            msg = u(msg) + u"\n"
-    if type(msg) is unicode:
-        msg = codecs.encode(msg, sys.stderr.encoding)
+            msg = u(msg) + "\n"
     sys.stderr.write(msg)
-
 
 def main():
     optParser = OptionParser()
@@ -78,24 +75,24 @@ def main():
             help="convert XML to normalized YML code")
     optParser.add_option("-V", "--version", action="callback", callback=printInfo, help="show version info and exit")
     (options, args) = optParser.parse_args()
-
+    
     if options.old_syntax:
         oldSyntax()
-
+    
     if options.trace:
         backend.enable_tracing = True
-
+    
     if options.emitlinenumbers:
         backend.emitlinenumbers = True
-
+    
     if options.includePathText:
         backend.includePath = options.includePathText.split(':')
-
+    
     backend.encoding = options.encoding
-
+    
     dirs = os.environ.get('YML_PATH', '.').split(':')
     backend.includePath.extend(dirs)
-
+    
     if options.xml2yml:
         for directory in backend.includePath:
             try:
@@ -105,22 +102,22 @@ def main():
                 break
             except:
                 pass
-
+    
         options.yslt = name
         options.xml = True
-
+    
     if  (options.xslt and options.yslt) or (options.xslt and options.xpath) or (options.yslt and options.xpath):
         sys.stderr.write("Cannot combine --xpath, --xslt and --yslt params\n")
         sys.exit(1)
-
+    
     try:
         ymlC = ymlCStyle()
-
-        rtext = u""
-
+    
+        rtext = ""
+    
         if not options.emptyinput:
             files = fileinput.input(args, mode="rU", openhook=fileinput.hook_encoded(options.encoding))
-
+    
             if options.xml:
                 rtext = ""
                 for line in files:
@@ -132,39 +129,39 @@ def main():
                     sys.exit(0)
                 else:
                     rtext = backend.finish(result)
-
+    
         if not rtext:
-            rtext = u"<empty/>"
-
+            rtext = "<empty/>"
+    
         def ymldebug(context, text):
             if options.trace:
                 sys.stderr.write("Debug: " + codecs.encode(u(text), options.encoding) + "\n")
             return ""
-
+    
         def ymlassert(context, value, msg):
             if options.trace:
                 if not value:
                     raise YMLAssert(msg)
             return ""
-
+    
         ymlns = etree.FunctionNamespace("http://fdik.org/yml")
         ymlns.prefix = "yml"
         ymlns['debug'] = ymldebug
         ymlns['assert'] = ymlassert
-
+    
         if options.xpath:
             tree = etree.fromstring(rtext)
             ltree = tree.xpath(codecs.decode(options.xpath, options.encoding))
-            rtext = u""
+            rtext = ""
             try:
                 for rtree in ltree:
                     rtext += etree.tostring(rtree, pretty_print=options.pretty, encoding=unicode)
             except:
                 rtext = ltree
-
+    
         elif options.yslt or options.xslt:
             params = {}
-
+    
             if options.yslt:
                 backend.clearAll()
                 yscript = fileinput.input(options.yslt, mode="rU", openhook=fileinput.hook_encoded(options.encoding))
@@ -175,21 +172,21 @@ def main():
                 ytext = ""
                 for line in yscript:
                     ytext += line
-
+    
             doc = etree.fromstring(rtext)
-
+    
             xsltree = etree.XML(ytext, base_url=os.path.abspath(yscript.filename()))
             transform = etree.XSLT(xsltree)
             
             if options.params:
                 params = eval(options.params)
                 for key, value in params.iteritems():
-                    if type(value) != unicode:
+                    if type(value) is not str:
                         params[key] = u(value)
             if options.stringparams:
                 for key, value in eval(options.stringparams).iteritems():
-                    params[key] = u"'" + u(value) + u"'"
-
+                    params[key] = "'" + u(value) + "'"
+    
             rresult = transform(doc, **params)
             # lxml is somewhat buggy
             try:
@@ -198,46 +195,48 @@ def main():
                 rtext = etree.tostring(rresult, encoding=unicode)
                 if not rtext:
                     rtext = codecs.decode(str(rresult), "utf-8")
-
+    
         if options.normalization != "none":
             rtext = unicodedata.normalize(options.normalization, rtext)
-
+    
         if options.pretty:
             plaintext = etree.tostring(etree.fromstring(rtext), pretty_print=True, xml_declaration=True, encoding=options.encoding)
         else:
-            if isinstance(rtext, unicode):
+            if isinstance(rtext, str):
                 plaintext = codecs.encode(rtext, options.encoding)
             else:
-                plaintext = str(rtext)
-
+                plaintext = rtext
+    
         try:
             if plaintext[-1] == "\n":
                 plaintext = plaintext[:-1]
         except: pass
-
+    
         if options.outputFile and options.outputFile != "-":
-            outfile = open(options.outputFile, "w")
+            outfile = open(options.outputFile, "wb")
             outfile.write(plaintext)
             outfile.close()
         else:
-            print(plaintext)
-
+            sys.stdout.buffer.write(plaintext)
+            if not options.pretty:
+                print()
+    
     except KeyboardInterrupt:
         w("\n")
         sys.exit(1)
     except YMLAssert as msg:
-        w(u"YML Assertion failed: " + u(msg) + u"\n")
+        w("YML Assertion failed: " + u(msg) + "\n")
         sys.exit(2)
     except KeyError as msg:
-        w(u"not found: " + u(msg) + u"\n")
+        w("not found: " + u(msg) + "\n")
         sys.exit(4)
     except LookupError as msg:
-        w(u"not found: " + u(msg) + u"\n")
+        w("not found: " + u(msg) + "\n")
         sys.exit(4)
     except etree.XMLSyntaxError as e:
         log = e.error_log.filter_from_level(etree.ErrorLevels.FATAL)
         for entry in log:
-            w(u"XML error: " + u(entry.message) + u"\n")
+            w("XML error: " + u(entry.message) + "\n")
         sys.exit(5)
     except Exception as msg:
         w(msg)

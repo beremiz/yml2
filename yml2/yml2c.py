@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # vim: set fileencoding=utf-8 :
 
 """\
-YML 2 compiler version 5.8
-Copyleft (c), 2009-2011, Volker Birk  http://fdik.org/yml/
+YML 2 compiler version 6.2
+Copyleft (c), 2009-2019, Volker Birk  http://fdik.org/yml/
 
 """
 
@@ -17,17 +17,14 @@ import backend
 
 def printInfo(option, opt_str, value, parser):
     sys.stdout.write(__doc__)
+    sys.exit(0)
 
 def w(msg):
     if isinstance(msg, BaseException):
-        try:
-            msg = str(msg) + "\n"
-        except:
-            msg = u(msg) + u"\n"
-    if type(msg) is unicode:
+        msg = str(msg) + "\n"
+    if type(msg) is bytes:
         msg = codecs.encode(msg, sys.stderr.encoding)
     sys.stderr.write(msg)
-
 
 def main():
     optParser = OptionParser()
@@ -78,20 +75,21 @@ def main():
                 result = unicodedata.normalize(options.normalization, result)
 
             if options.outputFile and options.outputFile != "-":
-                outfile = open(options.outputFile, "w")
+                outfile = open(options.outputFile, "wb")
                 outfile.write(codecs.encode(result, options.encoding))
                 outfile.close()
             else:
-                print(codecs.encode(result, options.encoding))
+                sys.stdout.buffer.write(codecs.encode(result, options.encoding))
+                print()
 
     except KeyboardInterrupt:
         w("\n")
         sys.exit(1)
     except KeyError as msg:
-        w(u"not found: " + u(msg) + u"\n")
+        w("not found: " + u(msg) + "\n")
         sys.exit(4)
     except LookupError as msg:
-        w(u"not found: " + u(msg) + u"\n")
+        w("not found: " + u(msg) + "\n")
         sys.exit(4)
     except Exception as msg:
         w(msg)
@@ -100,3 +98,4 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+

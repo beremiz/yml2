@@ -2,7 +2,7 @@
 # vim: set fileencoding=utf-8 :
 
 """\
-YML 2 compiler version 6.2
+YML 2 compiler version 2.6.2
 Copyleft (c), 2009-2019, Volker Birk  http://fdik.org/yml/
 
 """

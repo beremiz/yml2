@@ -1,0 +1,19 @@
+# Files to include in the source package - for the case
+# the project directory is are not in a VCS.
+include yml2c
+include yml2proc
+include yml2/*.ysl2
+include yml2/*.yml2
+
+include Makefile
+include *.yhtml2
+include format.css
+include COPYING.txt
+include README.rst
+include README.md
+
+include samples/*
+include vim/syntax/*
+
+exclude .hgtags
+exclude .hgignore

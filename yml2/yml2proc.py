@@ -3,7 +3,7 @@
 
 """\
 YML/YSLT 2 processor version 6.2
-Copyleft (c), 2009-2019 Volker Birk  http://fdik.org/yml/
+Copyleft (c), 2009-2020 Volker Birk  http://fdik.org/yml/
 
 """
 
@@ -22,7 +22,9 @@ if __name__ == "__main__":
 
 from yml2.yml2 import ymlCStyle, comment, oldSyntax
 from yml2.pyPEG import parse, u
-from yml2 import backend
+import yml2.backend as backend
+
+YML_DEFAULT_PATH = [os.path.dirname(backend.__file__)]
 
 def printInfo(option, opt_str, value, parser):
     sys.stdout.write(__doc__)
@@ -78,49 +80,48 @@ def main():
             help="convert XML to normalized YML code")
     optParser.add_option("-V", "--version", action="callback", callback=printInfo, help="show version info and exit")
     (options, args) = optParser.parse_args()
-    
+
     if options.old_syntax:
         oldSyntax()
-    
+
     if options.trace:
         backend.enable_tracing = True
-    
+
     if options.emitlinenumbers:
         backend.emitlinenumbers = True
-    
+
     if options.includePathText:
         backend.includePath = options.includePathText.split(':')
-    
+
     backend.encoding = options.encoding
-    
-    dirs = os.environ.get('YML_PATH', '.').split(':')
+
+    dirs = os.environ.get('YML_PATH', '.').split(':') + YML_DEFAULT_PATH
     backend.includePath.extend(dirs)
-    
+
     if options.xml2yml:
         for directory in backend.includePath:
-            try:
-                name = directory + "/xml2yml.ysl2"
-                f = open(name, "r")
-                f.close()
+            name = os.path.join(directory, "xml2yml.ysl2")
+            if os.path.isfile(name):
+                options.yslt = name
+                options.xml = True
                 break
-            except:
-                pass
-    
-        options.yslt = name
-        options.xml = True
-    
+        else:
+            sys.stderr.write("Error: Stylesheet xml2yml.ysl2 required for --xml2yml not found\n")
+            sys.stderr.write("Please check your YML_PATH\n")
+            sys.exit(1)
+
     if  (options.xslt and options.yslt) or (options.xslt and options.xpath) or (options.yslt and options.xpath):
         sys.stderr.write("Cannot combine --xpath, --xslt and --yslt params\n")
         sys.exit(1)
-    
+
     try:
         ymlC = ymlCStyle()
-    
+
         rtext = ""
-    
+
         if not options.emptyinput:
             files = fileinput.input(args, mode="rU", openhook=fileinput.hook_encoded(options.encoding))
-    
+
             if options.xml:
                 rtext = ""
                 for line in files:
@@ -132,26 +133,26 @@ def main():
                     sys.exit(0)
                 else:
                     rtext = backend.finish(result)
-    
+
         if not rtext:
             rtext = "<empty/>"
-    
+
         def ymldebug(context, text):
             if options.trace:
                 sys.stderr.write("Debug: " + codecs.encode(u(text), options.encoding) + "\n")
             return ""
-    
+
         def ymlassert(context, value, msg):
             if options.trace:
                 if not value:
                     raise YMLAssert(msg)
             return ""
-    
+
         ymlns = etree.FunctionNamespace("http://fdik.org/yml")
         ymlns.prefix = "yml"
         ymlns['debug'] = ymldebug
         ymlns['assert'] = ymlassert
-    
+
         if options.xpath:
             tree = etree.fromstring(rtext)
             ltree = tree.xpath(codecs.decode(options.xpath, options.encoding))
@@ -161,10 +162,10 @@ def main():
                     rtext += etree.tostring(rtree, pretty_print=options.pretty, encoding=unicode)
             except:
                 rtext = ltree
-    
+
         elif options.yslt or options.xslt:
             params = {}
-    
+
             if options.yslt:
                 backend.clearAll()
                 yscript = fileinput.input(options.yslt, mode="rU", openhook=fileinput.hook_encoded(options.encoding))
@@ -175,9 +176,9 @@ def main():
                 ytext = ""
                 for line in yscript:
                     ytext += line
-    
+
             doc = etree.fromstring(rtext)
-    
+
             xsltree = etree.XML(ytext, base_url=os.path.abspath(yscript.filename()))
             transform = etree.XSLT(xsltree)
             
@@ -189,7 +190,7 @@ def main():
             if options.stringparams:
                 for key, value in eval(options.stringparams).iteritems():
                     params[key] = "'" + u(value) + "'"
-    
+
             rresult = transform(doc, **params)
             # lxml is somewhat buggy
             try:
@@ -198,10 +199,10 @@ def main():
                 rtext = etree.tostring(rresult, encoding=unicode)
                 if not rtext:
                     rtext = codecs.decode(str(rresult), "utf-8")
-    
+
         if options.normalization != "none":
             rtext = unicodedata.normalize(options.normalization, rtext)
-    
+
         if options.pretty:
             plaintext = etree.tostring(etree.fromstring(rtext), pretty_print=True, xml_declaration=True, encoding=options.encoding)
         else:
@@ -209,12 +210,12 @@ def main():
                 plaintext = codecs.encode(rtext, options.encoding)
             else:
                 plaintext = rtext
-    
+
         try:
             if plaintext[-1] == "\n":
                 plaintext = plaintext[:-1]
         except: pass
-    
+
         if options.outputFile and options.outputFile != "-":
             outfile = open(options.outputFile, "wb")
             outfile.write(plaintext)
@@ -223,7 +224,7 @@ def main():
             sys.stdout.buffer.write(plaintext)
             if not options.pretty:
                 print()
-    
+
     except KeyboardInterrupt:
         w("\n")
         sys.exit(1)
@@ -248,3 +249,4 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+

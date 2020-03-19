@@ -2,8 +2,8 @@
 # vim: set fileencoding=utf-8 :
 
 """\
-YML 2 compiler version 2.6.2
-Copyleft (c), 2009-2019, Volker Birk  http://fdik.org/yml/
+YML 2 compiler version 6.2
+Copyleft (c), 2009-2020, Volker Birk  http://fdik.org/yml/
 
 """
 
@@ -16,7 +16,9 @@ if __name__ == "__main__":
 
 from yml2.pyPEG import parse, u
 from yml2.yml2 import ymlCStyle, comment, oldSyntax
-from yml2 import backend
+import yml2.backend as backend
+
+YML_DEFAULT_PATH = [os.path.dirname(backend.__file__)]
 
 def printInfo(option, opt_str, value, parser):
     sys.stdout.write(__doc__)
@@ -62,7 +64,7 @@ def main():
         if options.includePathText:
             backend.includePath = options.includePathText.split(':')
 
-        dirs = os.environ.get('YML_PATH', '.').split(':')
+        dirs = os.environ.get('YML_PATH', '.').split(':') + YML_DEFAULT_PATH
         backend.includePath.extend(dirs)
 
         files = fileinput.input(args, mode="rU", openhook=fileinput.hook_encoded(options.encoding))
@@ -101,3 +103,4 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+

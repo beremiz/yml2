@@ -11,9 +11,12 @@ import sys, os, codecs, locale
 import fileinput, unicodedata
 from optparse import OptionParser
 
-from pyPEG import parse, u
-from yml2 import ymlCStyle, comment, oldSyntax
-import backend
+if __name__ == "__main__":
+    sys.path.insert(0, os.path.dirname(__file__))
+
+from yml2.pyPEG import parse, u
+from yml2.yml2 import ymlCStyle, comment, oldSyntax
+from yml2 import backend
 
 def printInfo(option, opt_str, value, parser):
     sys.stdout.write(__doc__)
@@ -98,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-

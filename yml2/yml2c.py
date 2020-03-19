@@ -18,7 +18,7 @@ from yml2.pyPEG import parse, u
 from yml2.yml2 import ymlCStyle, comment, oldSyntax
 import yml2.backend as backend
 
-YML_DEFAULT_PATH = [os.path.dirname(backend.__file__)]
+YML_DEFAULT_PATHS = [os.path.dirname(backend.__file__)]
 
 def printInfo(option, opt_str, value, parser):
     sys.stdout.write(__doc__)
@@ -32,6 +32,7 @@ def w(msg):
     sys.stderr.write(msg)
 
 def main():
+    dirsepname = {':': 'a colon', ';': 'a semicolon'}.get(os.path.pathsep, "a '%s'" % os.path.pathsep)
     optParser = OptionParser()
     optParser.add_option("-C", "--old-syntax", action="store_true", dest="old_syntax",
             help="syntax of YML 2 version 1.x (compatibility mode)", default=False)
@@ -40,7 +41,7 @@ def main():
     optParser.add_option("-E", "--encoding", dest="encoding", metavar="ENCODING", default=locale.getdefaultlocale()[1],
             help="encoding of input files (default to locale)")
     optParser.add_option("-I", "--include", dest="includePathText", metavar="INCLUDE_PATH",
-            help="precede YML_PATH by a colon separated INCLUDE_PATH to search for include files")
+            help="precede YML_PATH by %s separated INCLUDE_PATH to search for include files" % dirsepname)
     optParser.add_option("-m", "--omit-empty-parm-tags", action="store_true", dest="omitemptyparm",
             help="does nothing (only there for compatibility reasons)", default=False)
     optParser.add_option("-n", "--normalization", dest="normalization", metavar="NORMALIZATION", default="NFC",
@@ -62,9 +63,9 @@ def main():
 
     try:
         if options.includePathText:
-            backend.includePath = options.includePathText.split(':')
+            backend.includePath = options.includePathText.split(os.path.pathsep)
 
-        dirs = os.environ.get('YML_PATH', '.').split(':') + YML_DEFAULT_PATH
+        dirs = os.environ.get('YML_PATH', '.').split(os.path.pathsep) + YML_DEFAULT_PATHS
         backend.includePath.extend(dirs)
 
         files = fileinput.input(args, mode="rU", openhook=fileinput.hook_encoded(options.encoding))

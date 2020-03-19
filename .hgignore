@@ -1,3 +1,5 @@
 syntax: glob
 *.pyc
 *.html
+YML2.egg-info
+dist

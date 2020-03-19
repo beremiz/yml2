@@ -975,6 +975,7 @@ page "The Features" {
         if the «YML_PATH» environment variable is set to a colon separated list of directories,
         these directories are being searched for the given filename. Otherwise, the local
         directory is searched.
+        The system location for «.yml2» and «.ysl2» files is always searched afterwards.
         >>
 
     p   >>

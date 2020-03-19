@@ -1,8 +1,9 @@
 YML_PATH  =
 DEBVER   := 1
 PYTHON   := python3
-PKGVER    = $(shell $(PYTHON) setup.py -V)
+PKGVER    = $(shell awk '/^version/ {print $$3}' setup.cfg)
 TWINE    := $(PYTHON) -m twine
+TWINEREP := pypi
 YML2C     = $(PYTHON) yml2c
 
 all: homepage
@@ -36,14 +37,18 @@ clean:
 	rm -rf *.egg-info
 	rm -f YML2_$(PKGVER).orig.tar.gz
 	rm -f python-yml2_$(PKGVER)-$(DEBVER)_all.deb
+	rm -f dist/YML2-$(PKGVER).tar.gz
 
-.PHONY: dist dist/YML2-$(PKGVER).tar.gz
-dist: dist/YML2-$(PKGVER).tar.gz
+sdist-pypi: dist/YML2-$(PKGVER).tar.gz
 	$(TWINE) check $<
 
+upload-pypi: sdist-pypi
+	$(TWINE) upload --repository "$(TWINEREP)" $<
+
+.PHONY: dist/YML2-$(PKGVER).tar.gz
 dist/YML2-$(PKGVER).tar.gz:
 	$(PYTHON) setup.py sdist
 
 install:
-	pip install .
+	pip install -e .
 

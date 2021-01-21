@@ -181,11 +181,11 @@ def main():
             
             if options.params:
                 params = eval(options.params)
-                for key, value in params.iteritems():
+                for key, value in params.items():
                     if type(value) is not str:
                         params[key] = u(value)
             if options.stringparams:
-                for key, value in eval(options.stringparams).iteritems():
+                for key, value in eval(options.stringparams).items():
                     params[key] = "'" + u(value) + "'"
 
             rresult = transform(doc, **params)

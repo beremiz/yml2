@@ -719,7 +719,7 @@ def codegen(obj):
 
     elif ctype == "include":
         reverse = False
-        ktext, kxml = False, False
+        ktext, kxml, kpointer = False, False, False
         for arg in obj[1]:
             if type(arg) is tuple or type(arg) is Symbol:
                 if arg[0] == "reverse":
@@ -728,8 +728,13 @@ def codegen(obj):
                     ktext = True
                 elif arg[0] == "kxml":
                     kxml = True
+                elif arg[0] == "kpointer":
+                    kpointer = True
             elif type(arg) is str:
                 filemask = arg
+
+        if kpointer:
+            filemask = pointer(filemask)
 
         if filemask[0] == '/' or filemask[0] == '.':
             files = sorted(glob(filemask))

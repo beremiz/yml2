@@ -17,7 +17,7 @@ except:
     sys.stderr.write("This program needs lxml, see http://codespeak.net/lxml/\n")
     sys.exit(1)
 
-from yml2 import ymlCStyle, comment, oldSyntax
+from yml2.grammar import ymlCStyle, comment, oldSyntax
 from yml2.pyPEG import parse, u
 import yml2.backend as backend
 

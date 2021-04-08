@@ -12,7 +12,7 @@ import fileinput, unicodedata
 from optparse import OptionParser
 
 from yml2.pyPEG import parse, u
-from yml2 import ymlCStyle, comment, oldSyntax
+from yml2.grammar import ymlCStyle, comment, oldSyntax
 import yml2.backend as backend
 
 YML_DEFAULT_PATH = [os.path.dirname(backend.__file__)]

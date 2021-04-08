@@ -79,7 +79,7 @@ def in_ns():        return keyword("in"), xmlSymbol, [_decl, ("{", -2, _decl, "}
 _decl = keyword("decl"), listing(decl), [";", "."]
 def textsection():  return r(r'(\|\|(\>*)(.*?)\|\|(\>*))\s*$', re.S | re.M)
 def textsectionu(): return r(r'(\>\>.*?\>\>)', re.S)
-def include():      return keyword("include"), 0, reverse, 0, [ktext, kxml], [(kpointer, pointer), filename], 0, [";", "."]
+def include():      return keyword("include"), 0, reverse, 0, [ktext, kxml], 0, kpointer, filename, 0, [";", "."]
 def func():         return _func, 0, content
 def funclist():     return listing(func)
 _cmd = funclist, 0, [";", "."]
@@ -106,5 +106,5 @@ def content():      return [ (_l, 0, _p, 0, _b, 0, _c), (_p, 0, _b, 0, _c), (_b,
 def reverse():      return keyword("reverse")
 def ktext():        return keyword("text")
 def kxml():         return keyword("xml")
-def kpointer():     return keyword("pointer")
+def kpointer():     return keyword("from")
 def ymlCStyle():    return -1, [_decl, in_ns, include, python, operator, constant, tagQuote, lineQuote, quote, _cmd]

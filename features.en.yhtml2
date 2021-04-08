@@ -992,7 +992,7 @@ page "The Features" {
 
     Code | include reverse part*.yml2
 
-    p > If there are the files part1.yml, part2.yml and part3.yml, part3.yml is included first now.
+    p > If there are the files part1.yml2, part2.yml2 and part3.yml2, part3.yml2 is included first now.
 
     p > To include plain text as text nodes, you can use:
 
@@ -1001,6 +1001,13 @@ page "The Features" {
     p > To include ready made XML, use:
 
     Code | include xml some.xml
+
+    p > If there is a file mask or a filename in a pointer you can include indirectly:
+
+    Code    ||
+            declare files = "*.yml2"
+            include from *files
+            ||
 
     h2 id=python > Escaping into Python – the Escape Operator !
 

@@ -1,4 +1,4 @@
-# 2.6.1 backend
+# 2.7.0 backend
 
 # written by VB.
 
@@ -734,7 +734,7 @@ def codegen(obj):
                 filemask = arg
 
         if kpointer:
-            filemask = pointer(filemask)
+            filemask = eval(pointer(filemask))
 
         if filemask[0] == '/' or filemask[0] == '.':
             files = sorted(glob(filemask))

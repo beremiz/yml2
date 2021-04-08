@@ -7,7 +7,7 @@ all: homepage
 homepage: index.html features.html yslt.html toolchain.html programming.html hello.html
 
 update: homepage format.css gpl-2.0.txt
-	rsync -avC *.html *.yml2 format.css *.yhtml2 gpl-2.0.txt samples dragon:fdik.org/yml2/
+	rsync -avC *.html format.css *.yhtml2 gpl-2.0.txt samples dragon:fdik.org/yml2/
 
 update-all: update yml2c yml2.py pyPEG.py backend.py yml2proc
 	if test -z $(VERSION) ; then echo VERSION not set ; exit 1 ; fi

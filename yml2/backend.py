@@ -736,8 +736,12 @@ def codegen(obj):
         if kpointer:
             filemask = eval(pointer(filemask))
 
-        if filemask[0] == '/' or filemask[0] == '.':
+        if os.path.isabs(filemask):
             files = sorted(glob(filemask))
+        elif filemask.startswith(os.curdir):
+            # by chance, this also strips the trailing line number
+            directory = os.path.dirname(line)
+            files = sorted(glob(os.path.join(directory, filemask)))
         else:
             files = []
             for directory in includePath:

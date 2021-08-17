@@ -46,7 +46,9 @@ def main():
     optParser.add_option("--debug", action="store_true", dest="trace",
             help="switch on tracing to stderr", default=False)
     optParser.add_option("-d", "--paramdict", dest="params", metavar="PARAMS",
-            help="call X/YSLT script with dictionary PARAMS as parameters")
+            help=("call X/YSLT script with dictionary PARAMS as parameters. "
+                  "PARAMS is a Python expression which evaluates to a "
+                  "Python dictionary."))
     optParser.add_option("-e", "--xpath", dest="xpath", metavar="XPATH",
             help="execute XPath expression XPATH and print result")
     optParser.add_option("-E", "--encoding", dest="encoding", metavar="ENCODING", default=locale.getdefaultlocale()[1],
@@ -66,7 +68,9 @@ def main():
     optParser.add_option("-P", "--pretty", action="store_true", default=False,
             help="pretty print output adding whitespace")
     optParser.add_option("-s", "--stringparamdict", dest="stringparams", metavar="STRINGPARAMS",
-            help="call X/YSLT script with dictionary STRINGPARAMS as string parameters")
+            help=("call X/YSLT script with dictionary STRINGPARAMS as string "
+                  "parameters. STRINGPARAMS is a Python expression which "
+                  "evaluates to a Python dictionary. Values will get quoted."))
     optParser.add_option("-x", "--xml", action="store_true", default=False,
             help="input document is XML already")
     optParser.add_option("-X", "--xslt", dest="xslt", metavar="XSLTSCRIPT",

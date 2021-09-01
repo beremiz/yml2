@@ -73,3 +73,9 @@ def "yml:CamelCase" {
     result "str:concat($capit)";
 }
 
+def "yml:abbr" {
+    param "text", "''";
+    const "tokens", "str:tokenize($text, '_')";
+    const "first" for "$tokens" value "substring(.,1,1)";
+    result "str:concat($first)";
+}

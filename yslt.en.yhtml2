@@ -4,7 +4,7 @@ page "YSLT – XSLT C style" {
     h1 id=intro > YSLT – an introduction
 
     p   >>
-        Especially the ¬http://www.w3.org/TR/xslt XSLT¬ programmer can benefit from YML.
+        Especially the ¬https://www.w3.org/TR/1999/REC-xslt-19991116 XSLT¬ programmer can benefit from YML.
         Usually many attributes of XSLT are annoying in programming praxis:
         >>
 
@@ -105,7 +105,7 @@ page "YSLT – XSLT C style" {
     p   >>
         Because YSLT is just a ¬index#ylanguages Y Language¬ for XSLT, you can do anything with YSLT
         you can do with XSLT in just nicer syntax ;-) To read what XSLT is all about, I recommend 
-        ¬http://www.w3.org/TR/xslt the official W3C documentation for XSLT¬.
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116 the official W3C documentation for XSLT¬.
         >>
 
     p   >>
@@ -677,7 +677,7 @@ page "YSLT – XSLT C style" {
 
     p   >>
         Because YSLT just generates XSLT programs, it will be a good idea to read the
-        ¬http://www.w3.org/TR/xslt XSLT Documentation¬ as well as the
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116 XSLT Documentation¬ as well as the
         ¬http://www.w3.org/TR/xpath XPath Documentation¬.
         >>
 
@@ -692,7 +692,7 @@ page "YSLT – XSLT C style" {
 
     p   >>
         Generates the «<xsl:apply-templates />»
-        ¬http://www.w3.org/TR/xslt#section-Applying-Template-Rules tag¬. The «*indent» pointer gives
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Applying-Template-Rules tag¬. The «*indent» pointer gives
         the number of indention levels to add (default: 1) for the Indention System.
         >>
 
@@ -710,12 +710,12 @@ page "YSLT – XSLT C style" {
 
     h3 > attrib(name, namespace)
 
-    p > Generates the «<xsl:attribute />» ¬http://www.w3.org/TR/xslt#creating-attributes tag¬.
+    p > Generates the «<xsl:attribute />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#creating-attributes tag¬.
 
     h3 > call(name)
 
     p   >>
-        Generates the «<call-template />» ¬http://www.w3.org/TR/xslt#named-templates tag¬.
+        Generates the «<call-template />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#named-templates tag¬.
         Used to call a «function()».
         >>
 
@@ -727,7 +727,7 @@ page "YSLT – XSLT C style" {
 
     p   >>
         Generates the «<xsl:choose />»
-        ¬http://www.w3.org/TR/xslt#section-Conditional-Processing-with-xsl:choose tag¬.
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Conditional-Processing-with-xsl:choose tag¬.
         Use in a «choose() ... when()... otherwise()...» structure.
         >>
 
@@ -746,7 +746,7 @@ page "YSLT – XSLT C style" {
 
     h3 > comment()
 
-    p > Generates the «<xsl:comment />» ¬http://www.w3.org/TR/xslt#section-Creating-Comments tag¬.
+    p > Generates the «<xsl:comment />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Creating-Comments tag¬.
 
     p i > Example:
 
@@ -754,7 +754,7 @@ page "YSLT – XSLT C style" {
 
     h3 > const(name, select)
 
-    p > Generates the «<xsl:variable />» ¬http://www.w3.org/TR/xslt#variables tag¬.
+    p > Generates the «<xsl:variable />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#variables tag¬.
 
     p i > Example:
 
@@ -762,7 +762,7 @@ page "YSLT – XSLT C style" {
 
     h3 > copy(select)
 
-    p > Generates the «<xsl:copy-of />» ¬http://www.w3.org/TR/xslt#copy-of tag¬.
+    p > Generates the «<xsl:copy-of />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#copy-of tag¬.
 
     p i > Example:
 
@@ -802,13 +802,13 @@ page "YSLT – XSLT C style" {
 
     p   >>
         Generates the «<xsl:element />»
-        ¬http://www.w3.org/TR/xslt#section-Creating-Elements-with-xsl:element tag¬.
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Creating-Elements-with-xsl:element tag¬.
         >>
 
     h3 > error()
 
     p   >>
-        Generates the «<xsl:message />» ¬http://www.w3.org/TR/xslt#message tag¬
+        Generates the «<xsl:message />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#message tag¬
         with attribute «terminate» set to "yes".
         >>
 
@@ -822,7 +822,7 @@ page "YSLT – XSLT C style" {
 
     h3 > for(select)
 
-    p > Generates the «<xsl:for-each />» ¬http://www.w3.org/TR/xslt#for-each tag¬.
+    p > Generates the «<xsl:for-each />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#for-each tag¬.
 
     p i > Example:
 
@@ -835,7 +835,7 @@ page "YSLT – XSLT C style" {
     h3 > function(name)
 
     p   >>
-        Generates the «<xsl:template />» ¬http://www.w3.org/TR/xslt#named-templates tag¬.
+        Generates the «<xsl:template />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#named-templates tag¬.
         Used by calling with «call()».
         >>
 
@@ -854,7 +854,7 @@ page "YSLT – XSLT C style" {
 
     p   >>
         Generates the «<xsl:if />»
-        ¬http://www.w3.org/TR/xslt#section-Conditional-Processing-with-xsl:if tag¬.
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Conditional-Processing-with-xsl:if tag¬.
         >>
 
     p i > Example:
@@ -863,31 +863,31 @@ page "YSLT – XSLT C style" {
 
     h3 > import(href)
 
-    p > Generates the «<xsl:import />» ¬http://www.w3.org/TR/xslt#import tag¬.
+    p > Generates the «<xsl:import />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#import tag¬.
 
     h3 > key(name, match, use)
 
-    p > Generates the «<xsl:key />» ¬http://www.w3.org/TR/xslt#key tag¬.
+    p > Generates the «<xsl:key />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#key tag¬.
 
     h3 > message()
 
-    p > Generates the «<xsl:message />» ¬http://www.w3.org/TR/xslt#message tag¬.
+    p > Generates the «<xsl:message />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#message tag¬.
 
     h3 > otherwise()
 
     p   >>
         Generates the «<xsl:otherwise />»
-        ¬http://www.w3.org/TR/xslt#section-Conditional-Processing-with-xsl:choose tag¬.
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Conditional-Processing-with-xsl:choose tag¬.
         Use in a «choose() ... when()... otherwise()...» structure.
         >>
 
     h3 > output(method)
 
-    p > Generates the «<xsl:output />» ¬http://www.w3.org/TR/xslt#output tag¬.
+    p > Generates the «<xsl:output />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#output tag¬.
 
     h3 > param(name, select)
 
-    p > Generates the «<xsl:param />» ¬http://www.w3.org/TR/xslt#variables tag¬.
+    p > Generates the «<xsl:param />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#variables tag¬.
 
     p i > Example:
 
@@ -897,13 +897,13 @@ page "YSLT – XSLT C style" {
 
     p   >>
         Generates the «<xsl:processing-instruction />»
-        ¬http://www.w3.org/TR/xslt#section-Creating-Processing-Instructions tag¬.
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Creating-Processing-Instructions tag¬.
         >>
 
     h3 > raw()
 
     p   >>
-        Generates the «<xsl:text />» ¬http://www.w3.org/TR/xslt#section-Creating-Text tag¬.
+        Generates the «<xsl:text />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Creating-Text tag¬.
         Sets the attribute «disable-output-escaping» to "yes".
         >>
 
@@ -917,8 +917,8 @@ page "YSLT – XSLT C style" {
     h3 > stylesheet(*output="xml")
 
     p   >>
-        Generates the XSLT «<stylesheet />» ¬http://www.w3.org/TR/xslt#stylesheet-element tag¬.
-        Additionally generates an «<output />» ¬http://www.w3.org/TR/xslt#output tag¬
+        Generates the XSLT «<stylesheet />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#stylesheet-element tag¬.
+        Additionally generates an «<output />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#output tag¬
         in the body, with attribute «method» set to the value of the pointer «*output» (default: "xml").
         >>
 
@@ -936,7 +936,7 @@ page "YSLT – XSLT C style" {
     h3 > template(match)
 
     p   >>
-        Generates the «<xsl:template />» ¬http://www.w3.org/TR/xslt#section-Defining-Template-Rules tag¬.
+        Generates the «<xsl:template />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Defining-Template-Rules tag¬.
         Additionally generates tags for the Indention System.
         >>
 
@@ -949,7 +949,7 @@ page "YSLT – XSLT C style" {
 
     h3 > text()
 
-    p > Generate the «<xsl:text />» ¬http://www.w3.org/TR/xslt#section-Creating-Text tag¬.
+    p > Generate the «<xsl:text />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Creating-Text tag¬.
 
     h3 > textstylesheet()
 
@@ -961,7 +961,7 @@ page "YSLT – XSLT C style" {
 
     h3 > value(select)
 
-    p > Generates the «<xsl:value-of />» ¬http://www.w3.org/TR/xslt#value-of tag¬.
+    p > Generates the «<xsl:value-of />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#value-of tag¬.
 
     p i > Example:
 
@@ -970,7 +970,7 @@ page "YSLT – XSLT C style" {
     h3 > warning()
 
     p   >>
-        Generates the «<xsl:message />» ¬http://www.w3.org/TR/xslt#message tag¬
+        Generates the «<xsl:message />» ¬https://www.w3.org/TR/1999/REC-xslt-19991116#message tag¬
         with attribute «terminate» set to "no".
         >>
 
@@ -978,7 +978,7 @@ page "YSLT – XSLT C style" {
 
     p   >>
         Generates the «<xsl:when />»
-        ¬http://www.w3.org/TR/xslt#section-Conditional-Processing-with-xsl:choose tag¬.
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Conditional-Processing-with-xsl:choose tag¬.
         Use in a «choose() ... when()... otherwise()...» structure.
         >>
 
@@ -986,7 +986,7 @@ page "YSLT – XSLT C style" {
 
     p   >>
         Generates the «<xsl:with-param />»
-        ¬http://www.w3.org/TR/xslt#section-Passing-Parameters-to-Templates tag¬.
+        ¬https://www.w3.org/TR/1999/REC-xslt-19991116#section-Passing-Parameters-to-Templates tag¬.
         >>
 
     p i > Example:

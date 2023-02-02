@@ -1,4 +1,4 @@
-# 2.7.0 backend
+# 2.7.4 backend
 
 # written by VB.
 
@@ -753,7 +753,7 @@ def codegen(obj):
             else:
                 raise IOError("in " + u(line) + ": include file(s) '" + filemask + "' not found")
 
-        includeFile = fileinput.input(files, mode="rU", openhook=fileinput.hook_encoded(encoding))
+        includeFile = fileinput.input(files, mode="r", openhook=fileinput.hook_encoded(encoding))
         _included = included
         if ktext or kxml:
             text = ""

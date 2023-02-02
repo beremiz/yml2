@@ -2,7 +2,7 @@
 # vim: set fileencoding=utf-8 :
 
 """\
-YML 2 compiler version 7.3
+YML 2 compiler version 7.4
 Copyleft (c), 2009-2023, Volker Birk  http://fdik.org/yml/
 
 """
@@ -64,7 +64,7 @@ def main():
         dirs = os.environ.get('YML_PATH', '.').split(':') + YML_DEFAULT_PATH
         backend.includePath.extend(dirs)
 
-        files = fileinput.input(args, mode="rU", openhook=fileinput.hook_encoded(options.encoding))
+        files = fileinput.input(args, mode="r", openhook=fileinput.hook_encoded(options.encoding))
 
         ymlC = ymlCStyle()
         result = parse(ymlC, files, True, comment, packrat=True)

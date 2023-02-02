@@ -117,7 +117,7 @@ def main():
         rtext = ""
 
         if not options.emptyinput:
-            files = fileinput.input(args, mode="rU", openhook=fileinput.hook_encoded(options.encoding))
+            files = fileinput.input(args, mode="r", openhook=fileinput.hook_encoded(options.encoding))
 
             if options.xml:
                 rtext = ""
@@ -165,11 +165,11 @@ def main():
 
             if options.yslt:
                 backend.clearAll()
-                yscript = fileinput.input(options.yslt, mode="rU", openhook=fileinput.hook_encoded(options.encoding))
+                yscript = fileinput.input(options.yslt, mode="r", openhook=fileinput.hook_encoded(options.encoding))
                 yresult = parse(ymlC, yscript, True, comment)
                 ytext = backend.finish(yresult)
             else:
-                yscript = fileinput.input(options.xslt, mode="rU")
+                yscript = fileinput.input(options.xslt, mode="r")
                 ytext = ""
                 for line in yscript:
                     ytext += line

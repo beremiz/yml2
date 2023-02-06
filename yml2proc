@@ -2,7 +2,7 @@
 # vim: set fileencoding=utf-8 :
 
 """\
-YML/YSLT 2 processor version 7.4
+YML/YSLT 2 processor version 7.5
 Copyleft (c), 2009-2023 Volker Birk  http://fdik.org/yml/
 
 """
@@ -52,7 +52,7 @@ def main():
     optParser.add_option("-E", "--encoding", dest="encoding", metavar="ENCODING", default=locale.getdefaultlocale()[1],
             help="encoding of input files (default to locale)")
     optParser.add_option("-I", "--include", dest="includePathText", metavar="INCLUDE_PATH",
-            help="precede YML_PATH by a colon separated INCLUDE_PATH to search for include files")
+            help="precede YML_PATH by a colon separated INCLUDE_PATH (semicolon on Windows) to search for include files")
     optParser.add_option("-m", "--omit-empty-parm-tags", action="store_true", dest="omitemptyparm",
             help="does nothing (only there for compatibility reasons)", default=False)
     optParser.add_option("-M", "--empty-input-document", action="store_true", dest="emptyinput",
@@ -88,11 +88,11 @@ def main():
         backend.emitlinenumbers = True
 
     if options.includePathText:
-        backend.includePath = options.includePathText.split(':')
+        backend.includePath = options.includePathText.split(';' if os.name == 'nt' else ':')
 
     backend.encoding = options.encoding
 
-    dirs = os.environ.get('YML_PATH', '.').split(':') + YML_DEFAULT_PATH
+    dirs = os.environ.get('YML_PATH', '.').split(';' if os.name == 'nt' else ':') + YML_DEFAULT_PATH
     backend.includePath.extend(dirs)
 
     if options.xml2yml:

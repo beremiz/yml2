@@ -47,7 +47,7 @@ page "The YML Toolchain" {
     h3 > -I INCLUDE_PATH, --include=INCLUDE_PATH
 
     p { "Precede " code > ¬features#ymlpath YML_PATH¬
-      " by a colon separated " code "INCLUDE_PATH"; " to search for include files." }
+      " by a colon separated " code "INCLUDE_PATH"; " (semicolon separated on Windows) to search for include files." }
 
     h3 > -m, --omit-empty-parm-tags
     
@@ -85,7 +85,8 @@ page "The YML Toolchain" {
 
     p   >>
         If «YML_PATH» is set to a colon separated ¬http://en.wikipedia.org/wiki/Path_(computing) path¬
-        list, then the `a href="features#including" code "include";` statement searches these paths.
+        list (semicolon separated on Windows), then the
+        `a href="features#including" code "include";` statement searches these paths.
         If «YML_PATH» is not set, the local directory «.» is searched for files.
         The system location for «.yml2» and «.ysl2» files is always searched afterwards.
         >>
@@ -134,7 +135,7 @@ page "The YML Toolchain" {
     h3 > -I INCLUDE_PATH, --include=INCLUDE_PATH
 
     p { "Precede " code > ¬features#ymlpath YML_PATH¬
-      " by a colon separated " code "INCLUDE_PATH"; " to search for include files." }
+      " by a colon separated " code "INCLUDE_PATH"; " (semicolon separated on Windows) to search for include files." }
 
     h3 > -m, --omit-empty-parm-tags
     
@@ -230,7 +231,8 @@ page "The YML Toolchain" {
 
     p   >>
         If «YML_PATH» is set to a colon separated ¬http://en.wikipedia.org/wiki/Path_(computing) path¬
-        list, then the `a href="features#including" code "include";` statement searches these paths.
+        list (semicolon separated on Windows), then the
+        `a href="features#including" code "include";` statement searches these paths.
         If «YML_PATH» is not set, the local directory «.» is searched for files.
         The system location for «.yml2» and «.ysl2» files is always searched afterwards.
         >>

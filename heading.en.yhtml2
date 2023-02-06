@@ -13,7 +13,7 @@ decl ne is a {
 div id=headline {
     p > YML – Why a Markup Language?!
     div class=small {
-        "YML 2.7.4 of Thu 02 Feb 2023  –  Copyleft 2007-2023, "
+        "YML 2.7.5 of Mon 07 Feb 2023  –  Copyleft 2007-2023, "
         a "http://blog.fdik.org", "Volker Birk";
         " – "
         a "https://gitea.pep.foundation/fdik/yml2", "Download YML 2";

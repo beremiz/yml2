@@ -49,7 +49,7 @@ def main():
             help="call X/YSLT script with dictionary PARAMS as parameters")
     optParser.add_option("-e", "--xpath", dest="xpath", metavar="XPATH",
             help="execute XPath expression XPATH and print result")
-    optParser.add_option("-E", "--encoding", dest="encoding", metavar="ENCODING", default=locale.getdefaultlocale()[1],
+    optParser.add_option("-E", "--encoding", dest="encoding", metavar="ENCODING", default=locale.getlocale()[1],
             help="encoding of input files (default to locale)")
     optParser.add_option("-I", "--include", dest="includePathText", metavar="INCLUDE_PATH",
             help="precede YML_PATH by a colon separated INCLUDE_PATH (semicolon on Windows) to search for include files")

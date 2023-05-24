@@ -34,7 +34,7 @@ def main():
             help="syntax of YML 2 version 1.x (compatibility mode)", default=False)
     optParser.add_option("-D", "--emit-linenumbers", action="store_true", dest="emitlinenumbers",
             help="emit line numbers into the resulting XML for debugging purposes", default=False)
-    optParser.add_option("-E", "--encoding", dest="encoding", metavar="ENCODING", default=locale.getdefaultlocale()[1],
+    optParser.add_option("-E", "--encoding", dest="encoding", metavar="ENCODING", default=locale.getlocale()[1],
             help="encoding of input files (default to locale)")
     optParser.add_option("-I", "--include", dest="includePathText", metavar="INCLUDE_PATH",
             help="precede YML_PATH by a colon separated INCLUDE_PATH (semicolon on Windows) to search for include files")

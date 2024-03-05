@@ -17,7 +17,7 @@ div id=headline {
         " –  Copyleft 2007-2023, "
         a "http://blog.fdik.org", "Volker Birk";
         " – "
-        a "https://gitea.pep.foundation/fdik/yml2", "Download YML 2";
+        a "https://codeberg.org/fdik/yml2", "Download YML 2";
     }
 }
 
@@ -57,7 +57,7 @@ div id=navigation {
     ne "toolchain#processor", "YML/YSLT processor";
     ne "toolchain#recommended", "Recommended external tools";
     ne "http://www.auchdieserschwachsinnmussinsinternet.de/2009-03/#s1236859037", "Windows tool chain";
-    ne "https://gitea.pep.foundation/fdik/yml2", "Download YML 2";
+    ne "https://codeberg.org/fdik/yml2", "Download YML 2";
 
     h1 "Misc";
     ne "gpl-2.0.txt", "License for YML";

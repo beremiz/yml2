@@ -247,9 +247,10 @@ class YF:
         resultParms = self.values.copy()
         macros = self.macros.copy()
         toDelete = [ key for key in resultParms.keys() ]
+        toPointers = {}
         for key in toDelete:
             if key[0] == "*":
-                del resultParms[key]
+                toPointers[key] = resultParms.pop(key)
         for key, value in callValues.items():
             if key[0] == "%":
                 macros[key] = value
@@ -259,11 +260,7 @@ class YF:
         for cp in callParms:
             if i < len(self.parms):
                 if self.parms[i][0] == "*":
-                    cp = u(cp)
-                    if "'" in cp:
-                        pointers[self.parms[i][1:]] = '"' + cp + '"'
-                    else:
-                        pointers[self.parms[i][1:]] = "'" + cp + "'"
+                    toPointers[self.parms[i]] = cp
                 elif self.parms[i][0] == "%":
                     macros[self.parms[i]] = u(cp)
                 else:
@@ -272,6 +269,10 @@ class YF:
                 extraContent += u(cp)
                 hasContent = True
             i += 1
+        for k,v in toPointers.items():
+            v = applyMacros(macros, u(v))
+            q = '"' if "'" in v else "'"
+            pointers[k[1:]] = q + v + q
         result = ""
         for p, v in resultParms.items():
             if p[0] == "'" or p[0] == '"':

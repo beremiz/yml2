@@ -19,7 +19,7 @@ in xsl {
     decl output(method), key(name, match, use);
     decl value(select) alias value-of, copy(select) alias copy-of;
 
-    decl indent is value(%level, select='substring($space, 1, $_indent + (%level) * $autoindent)');
+    decl indent is value(%level=1, select='substring($space, 1, $_indent + (%level) * $autoindent)');
 
     decl stylesheet(
         *output="xml",
@@ -75,8 +75,14 @@ in xsl {
 
     decl with(name, select) alias with-param;
     decl withIndent(%level, name="_indent", select='$_indent + (%level) * $autoindent') alias with-param;
+    decl localIndent(%level, name="_indent", select='$_indent + (%level) * $autoindent') alias variable;
 
     decl apply(select, *indent=1) alias apply-templates {
+        _trace_with *_trace_info;
+        withIndent *indent;
+        content;
+    };
+    decl icall(name, *indent=1) alias call-template {
         _trace_with *_trace_info;
         withIndent *indent;
         content;

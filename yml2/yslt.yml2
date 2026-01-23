@@ -38,11 +38,12 @@ in xsl {
         xmlns:func='http://exslt.org/functions',
         xmlns:str='http://exslt.org/strings',
         xmlns:dyn='http://exslt.org/dynamic',
+        xmlns:regexp='http://exslt.org/regular-expressions',
         xmlns:set='http://exslt.org/sets',
         xmlns:sets='http://exslt.org/sets',
         xmlns:date='http://exslt.org/dates-and-times',
         xmlns:yml='http://fdik.org/yml',
-        extension-element-prefixes='exsl func str dyn set sets math date yml'
+        extension-element-prefixes='exsl func str dyn regexp set sets math date yml'
     );
 
     decl textstylesheet is estylesheet(*output="text") {

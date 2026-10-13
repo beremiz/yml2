@@ -136,7 +136,7 @@ def main():
 
         def ymldebug(context, text):
             if options.trace:
-                sys.stderr.write("Debug: " + codecs.encode(u(text), options.encoding) + "\n")
+                sys.stderr.write("Debug: " + u(text) + "\n")
             return ""
 
         def ymlassert(context, value, msg):
